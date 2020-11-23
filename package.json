@@ -1,6 +1,6 @@
 {
-  "name": "@juanfabrega/normalizr-plus",
-  "version": "3.7.0",
+  "name": "normalizrplus",
+  "version": "3.8.0",
   "description": "Normalizes and denormalizes JSON according to schema for Redux and Flux applications. This is FORK of normalizr",
   "bugs": {
     "url": "https://github.com/juanfabrega/normalizr-plus/issues"

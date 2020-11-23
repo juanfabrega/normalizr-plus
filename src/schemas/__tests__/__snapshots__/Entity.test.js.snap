@@ -294,18 +294,8 @@ Object {
   "entities": Object {
     "articles": Object {
       "123": Object {
-        "author": Object {
-          "id": "8472",
-          "name": "Paul",
-        },
         "authorId": "8472",
         "body": "This article is great.",
-        "comments": Array [
-          Object {
-            "comment": "I like it!",
-            "id": "comment-123-4738",
-          },
-        ],
         "commentsIds": Array [
           "comment-123-4738",
         ],
@@ -335,18 +325,8 @@ Object {
   "entities": Object {
     "articles": Object {
       "123": Object {
-        "author": Object {
-          "id": "8472",
-          "name": "Paul",
-        },
         "author_id": "8472",
         "body": "This article is great.",
-        "comments": Array [
-          Object {
-            "comment": "I like it!",
-            "id": "comment-123-4738",
-          },
-        ],
         "comments_ids": Array [
           "comment-123-4738",
         ],

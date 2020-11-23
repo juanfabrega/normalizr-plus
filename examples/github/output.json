@@ -398,9 +398,7 @@
         "state": "open",
         "locked": false,
         "assignee": 33297,
-        "assignees": [
-          33297
-        ],
+        "assignees": [33297],
         "milestone": 1883567,
         "comments": 0,
         "created_at": "2016-05-11T19:52:34Z",
@@ -422,9 +420,7 @@
         "state": "open",
         "locked": false,
         "assignee": 33297,
-        "assignees": [
-          33297
-        ],
+        "assignees": [33297],
         "milestone": 1883567,
         "comments": 0,
         "created_at": "2016-05-11T19:53:07Z",
@@ -540,7 +536,7 @@
         "created_at": "2016-11-22T21:08:09Z",
         "updated_at": "2016-11-28T10:11:54Z",
         "closed_at": null,
-        "body": "# Problem\r\n\r\nI have a perfectly working Redux app being served out via Express, I'm using webpack which I suspect may be the problem.\r\n\r\n**Input**\r\n\r\nHere's how I'm using normalizr, in schema.js\r\n\r\n```js\r\nimport { Schema, arrayOf, valuesOf } from 'normalizr';\r\n\r\nconst uploadSchema = new Schema('uploads');\r\nconst sheetSchema = new Schema('sheets');\r\nconst mappingSchema = new Schema('mappings');\r\nconst tableSchema = new Schema('tables');\r\nconst rowSchema = new Schema('rows');\r\n\r\nuploadSchema.define({\r\n  sheets: valuesOf(sheetSchema)\r\n})\r\n\r\nsheetSchema.define({\r\n  mapping: mappingSchema,\r\n  rows: {\r\n    collection: arrayOf(tableSchema)\r\n  }\r\n})\r\n\r\nexport { uploadSchema, sheetSchema, mappingSchema, tableSchema, rowSchema }\r\n```\r\n\r\nand in a utility file I have for abstracting out my ajax calls via `whatwg-fetch`:\r\n\r\n```js\r\nimport { normalize } from 'normalizr';\r\nimport {uploadSchema, sheetSchema, mappingSchema, tableSchema, rowSchema} from \"./schema\";\r\nimport 'whatwg-fetch';\r\n\r\n... some functions ...\r\n\r\nfunction handleRequestAndResponse(url, request) {\r\n  console.log(\"request:\");\r\n  console.log(request);\r\n\r\n  return fetch(url, request)\r\n          .then(function (resp) {\r\n            // check status and throw if unexpected...\r\n            if (resp.status >= 200 && resp.status < 400) {\r\n              return resp\r\n            } else {\r\n\r\n              console.log(\"uncaught error, but we will format a response from it...\")\r\n              console.log(resp)\r\n\r\n              var errorResponse = new Error(resp.statusText)\r\n              errorResponse.error = true\r\n              errorResponse.status = resp.status;\r\n              errorResponse.url = resp.url;\r\n              errorResponse.body = resp.body;\r\n\r\n              throw errorResponse\r\n            }\r\n          }).then(function (resp) {\r\n            // parse JSON\r\n            return resp.json();\r\n          }).then(function (resp) {\r\n            // log and return\r\n            console.log(\"response:\");\r\n            console.log(resp);\r\n\r\n           // boom, here, normalize is an uncaught ref, and if I insert a debugger anywhere else in this file, the same\r\n            debugger\r\n\r\n            return resp;\r\n          }).catch(function(errorResp) {\r\n            return errorResp;\r\n          });\r\n}\r\n```\r\n\r\nI suspected TypeScript involvement and tried to remedy with ts-loader, no dice.\r\n\r\nI tried directly importing normalizr without success:\r\n\r\n`import 'normalizr'`\r\n\r\nI've tried adjusting my webpack in the endless esoteric ways it requires to no avail.\r\n\r\nI've tried directly importing functions from normalizr.min.js in the dist folder, also to no avail.\r\n\r\nMy webpack:\r\n\r\n```\r\nvar path = require('path');\r\nvar webpack = require('webpack');\r\n\r\nmodule.exports = {\r\n  devtool: 'eval-source-map',\r\n  entry:\r\n      [\r\n        'whatwg-fetch',\r\n        'webpack-hot-middleware/client',\r\n        './client/inventory-app'\r\n      ]\r\n  ,\r\n  output: {\r\n    path: path.join(__dirname, 'dist'),\r\n    filename: 'bundle.js',\r\n    publicPath: '/static/'\r\n  },\r\n  plugins: [\r\n    new webpack.HotModuleReplacementPlugin(),\r\n    new webpack.NoErrorsPlugin()\r\n  ],\r\n  resolve: {\r\n    alias: {\r\n      webworkify: 'webworkify-webpack'\r\n    },\r\n    extensions: ['', '.scss', '.css', '.js', '.json', '.ts'],\r\n    modulesDirectories: [\r\n      'node_modules',\r\n      path.resolve(__dirname, './node_modules')\r\n    ]\r\n  },\r\n  module: {\r\n    loaders: [\r\n      {\r\n        test: /\\.css$/,\r\n        loader:'style!css!'\r\n      },\r\n      { test: /\\.tsx?$/, loader: \"ts-loader\" },\r\n      {\r\n        test: /\\.js$/,\r\n        loaders: ['babel'],\r\n        // loaders: ['babel?presets[]=es2015,presets[]=stage-0,presets[]=react,plugins[]=transform-runtime'],\r\n        exclude: /node_modules/,\r\n        include: path.join(__dirname, 'client')\r\n      },\r\n      {\r\n        test: /\\.json$/,\r\n        loader: 'json-loader'\r\n      }\r\n    ]\r\n  }\r\n};\r\n```\r\n\r\nNote that the typescript stuff was added by me most recently and didn't help.\r\n\r\nAlso note that when in my schema.js when I insert a debugger statement below the const definitions, my consts *are* defined, but if I try to \"var foo = new Schema('foo')\" I'll get a reference error again.\r\n\r\nI'm at a loss. I hope this isn't my poor understanding of webpack, but this has only happened with this integration so I'm opening an issue after not finding success looking around on the web / asking in Reactiflux.\r\n\r\n\r\n\r\n"
+        "body": "# Problem\r\n\r\nI have a perfectly working Redux app being served out via Express, I'm using webpack which I suspect may be the problem.\r\n\r\n**Input**\r\n\r\nHere's how I'm using normalizr, in schema.js\r\n\r\n```js\r\nimport { Schema, arrayOf, valuesOf } from 'normalizrplus';\r\n\r\nconst uploadSchema = new Schema('uploads');\r\nconst sheetSchema = new Schema('sheets');\r\nconst mappingSchema = new Schema('mappings');\r\nconst tableSchema = new Schema('tables');\r\nconst rowSchema = new Schema('rows');\r\n\r\nuploadSchema.define({\r\n  sheets: valuesOf(sheetSchema)\r\n})\r\n\r\nsheetSchema.define({\r\n  mapping: mappingSchema,\r\n  rows: {\r\n    collection: arrayOf(tableSchema)\r\n  }\r\n})\r\n\r\nexport { uploadSchema, sheetSchema, mappingSchema, tableSchema, rowSchema }\r\n```\r\n\r\nand in a utility file I have for abstracting out my ajax calls via `whatwg-fetch`:\r\n\r\n```js\r\nimport { normalize } from 'normalizrplus';\r\nimport {uploadSchema, sheetSchema, mappingSchema, tableSchema, rowSchema} from \"./schema\";\r\nimport 'whatwg-fetch';\r\n\r\n... some functions ...\r\n\r\nfunction handleRequestAndResponse(url, request) {\r\n  console.log(\"request:\");\r\n  console.log(request);\r\n\r\n  return fetch(url, request)\r\n          .then(function (resp) {\r\n            // check status and throw if unexpected...\r\n            if (resp.status >= 200 && resp.status < 400) {\r\n              return resp\r\n            } else {\r\n\r\n              console.log(\"uncaught error, but we will format a response from it...\")\r\n              console.log(resp)\r\n\r\n              var errorResponse = new Error(resp.statusText)\r\n              errorResponse.error = true\r\n              errorResponse.status = resp.status;\r\n              errorResponse.url = resp.url;\r\n              errorResponse.body = resp.body;\r\n\r\n              throw errorResponse\r\n            }\r\n          }).then(function (resp) {\r\n            // parse JSON\r\n            return resp.json();\r\n          }).then(function (resp) {\r\n            // log and return\r\n            console.log(\"response:\");\r\n            console.log(resp);\r\n\r\n           // boom, here, normalize is an uncaught ref, and if I insert a debugger anywhere else in this file, the same\r\n            debugger\r\n\r\n            return resp;\r\n          }).catch(function(errorResp) {\r\n            return errorResp;\r\n          });\r\n}\r\n```\r\n\r\nI suspected TypeScript involvement and tried to remedy with ts-loader, no dice.\r\n\r\nI tried directly importing normalizr without success:\r\n\r\n`import 'normalizr'`\r\n\r\nI've tried adjusting my webpack in the endless esoteric ways it requires to no avail.\r\n\r\nI've tried directly importing functions from normalizr.min.js in the dist folder, also to no avail.\r\n\r\nMy webpack:\r\n\r\n```\r\nvar path = require('path');\r\nvar webpack = require('webpack');\r\n\r\nmodule.exports = {\r\n  devtool: 'eval-source-map',\r\n  entry:\r\n      [\r\n        'whatwg-fetch',\r\n        'webpack-hot-middleware/client',\r\n        './client/inventory-app'\r\n      ]\r\n  ,\r\n  output: {\r\n    path: path.join(__dirname, 'dist'),\r\n    filename: 'bundle.js',\r\n    publicPath: '/static/'\r\n  },\r\n  plugins: [\r\n    new webpack.HotModuleReplacementPlugin(),\r\n    new webpack.NoErrorsPlugin()\r\n  ],\r\n  resolve: {\r\n    alias: {\r\n      webworkify: 'webworkify-webpack'\r\n    },\r\n    extensions: ['', '.scss', '.css', '.js', '.json', '.ts'],\r\n    modulesDirectories: [\r\n      'node_modules',\r\n      path.resolve(__dirname, './node_modules')\r\n    ]\r\n  },\r\n  module: {\r\n    loaders: [\r\n      {\r\n        test: /\\.css$/,\r\n        loader:'style!css!'\r\n      },\r\n      { test: /\\.tsx?$/, loader: \"ts-loader\" },\r\n      {\r\n        test: /\\.js$/,\r\n        loaders: ['babel'],\r\n        // loaders: ['babel?presets[]=es2015,presets[]=stage-0,presets[]=react,plugins[]=transform-runtime'],\r\n        exclude: /node_modules/,\r\n        include: path.join(__dirname, 'client')\r\n      },\r\n      {\r\n        test: /\\.json$/,\r\n        loader: 'json-loader'\r\n      }\r\n    ]\r\n  }\r\n};\r\n```\r\n\r\nNote that the typescript stuff was added by me most recently and didn't help.\r\n\r\nAlso note that when in my schema.js when I insert a debugger statement below the const definitions, my consts *are* defined, but if I try to \"var foo = new Schema('foo')\" I'll get a reference error again.\r\n\r\nI'm at a loss. I hope this isn't my poor understanding of webpack, but this has only happened with this integration so I'm opening an issue after not finding success looking around on the web / asking in Reactiflux.\r\n\r\n\r\n\r\n"
       },
       "196525159": {
         "url": "https://api.github.com/repos/paularmstrong/normalizr/issues/185",
@@ -600,9 +596,7 @@
         "state": "open",
         "locked": false,
         "assignee": 33297,
-        "assignees": [
-          33297
-        ],
+        "assignees": [33297],
         "milestone": 2205635,
         "comments": 0,
         "created_at": "2016-12-21T15:04:39Z",
@@ -624,9 +618,7 @@
         "state": "open",
         "locked": false,
         "assignee": 33297,
-        "assignees": [
-          33297
-        ],
+        "assignees": [33297],
         "milestone": 2205635,
         "comments": 0,
         "created_at": "2016-12-21T15:06:29Z",
@@ -648,9 +640,7 @@
         "state": "open",
         "locked": false,
         "assignee": 69485,
-        "assignees": [
-          69485
-        ],
+        "assignees": [69485],
         "milestone": 2205635,
         "comments": 2,
         "created_at": "2016-12-21T15:42:53Z",

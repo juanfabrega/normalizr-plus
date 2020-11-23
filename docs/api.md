@@ -19,7 +19,7 @@ Normalizes input data per the schema definition provided.
 ### Usage
 
 ```js
-import { normalize, schema } from 'normalizr';
+import { normalize, schema } from 'normalizrplus';
 
 const myData = { users: [{ id: 1 }, { id: 2 }] };
 const user = new schema.Entity('users');
@@ -56,7 +56,7 @@ If your schema and data have recursive references, only the first instance of an
 ### Usage
 
 ```js
-import { denormalize, schema } from 'normalizr';
+import { denormalize, schema } from 'normalizrplus';
 
 const user = new schema.Entity('users');
 const mySchema = { users: [user] };

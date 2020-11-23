@@ -104,6 +104,11 @@ export default class EntitySchema {
           addEntity,
           visitedEntities
         );
+
+        // Delete old key if we're transforming name.
+        if (this._keyNameAffix) {
+          delete processedEntity[key];
+        }
       }
     });
 
