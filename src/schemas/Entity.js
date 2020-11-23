@@ -16,6 +16,7 @@ export default class EntitySchema {
       },
       processStrategy = (input) => ({ ...input }),
       fallbackStrategy = (key, schema) => undefined,
+      keyNamingStrategy,
     } = options;
 
     this._key = key;
@@ -24,6 +25,14 @@ export default class EntitySchema {
     this._mergeStrategy = mergeStrategy;
     this._processStrategy = processStrategy;
     this._fallbackStrategy = fallbackStrategy;
+
+    this._keyNameAffix = '';
+    if (keyNamingStrategy === 'camelCase') {
+      this._keyNameAffix = 'Id';
+    } else if (keyNamingStrategy === 'snakeCase') {
+      this._keyNameAffix = '_id';
+    }
+
     this.define(definition);
   }
 
@@ -54,6 +63,17 @@ export default class EntitySchema {
     return this._fallbackStrategy(id, schema);
   }
 
+  getKeyName(key, schema) {
+    if (!this._keyNameAffix) {
+      return key;
+    }
+    if (Array.isArray(schema)) {
+      return `${key}${this._keyNameAffix}s`;
+    } else {
+      return `${key}${this._keyNameAffix}`;
+    }
+  }
+
   normalize(input, parent, key, visit, addEntity, visitedEntities) {
     const id = this.getId(input, parent, key);
     const entityType = this.key;
@@ -74,10 +94,12 @@ export default class EntitySchema {
       if (processedEntity.hasOwnProperty(key) && typeof processedEntity[key] === 'object') {
         const schema = this.schema[key];
         const resolvedSchema = typeof schema === 'function' ? schema(input) : schema;
-        processedEntity[key] = visit(
+
+        const idKey = this.getKeyName(key, resolvedSchema);
+        processedEntity[idKey] = visit(
           processedEntity[key],
           processedEntity,
-          key,
+          idKey,
           resolvedSchema,
           addEntity,
           visitedEntities
@@ -95,9 +117,10 @@ export default class EntitySchema {
     }
 
     Object.keys(this.schema).forEach((key) => {
-      if (entity.hasOwnProperty(key)) {
-        const schema = this.schema[key];
-        entity[key] = unvisit(entity[key], schema);
+      const schema = this.schema[key];
+      const idKey = this.getKeyName(key, schema);
+      if (entity.hasOwnProperty(idKey)) {
+        entity[key] = unvisit(entity[idKey], schema);
       }
     });
     return entity;

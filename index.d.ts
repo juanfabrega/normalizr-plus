@@ -14,6 +14,7 @@ declare namespace schema {
     mergeStrategy?: MergeFunction
     processStrategy?: StrategyFunction<T>
     fallbackStrategy?: FallbackFunction<T>
+    keyNamingStrategy?: 'camelCase' | 'snakeCase' | null
   }
 
   export class Entity<T = any> {

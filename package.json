@@ -1,13 +1,13 @@
 {
-  "name": "normalizr",
-  "version": "3.6.1",
-  "description": "Normalizes and denormalizes JSON according to schema for Redux and Flux applications",
+  "name": "@juanfabrega/normalizr-plus",
+  "version": "3.7.1",
+  "description": "Normalizes and denormalizes JSON according to schema for Redux and Flux applications. This is FORK of normalizr",
   "bugs": {
-    "url": "https://github.com/paularmstrong/normalizr/issues"
+    "url": "https://github.com/juanfabrega/normalizr-plus/issues"
   },
-  "homepage": "https://github.com/paularmstrong/normalizr",
+  "homepage": "https://github.com/juanfabrega/normalizr-plus",
   "repository": {
-    "url": "https://github.com/paularmstrong/normalizr.git",
+    "url": "https://github.com/juanfabrega/normalizr-plus.git",
     "type": "git"
   },
   "keywords": [
@@ -47,9 +47,10 @@
     "tsc:ci": "tsc --noEmit typescript-tests/*",
     "typecheck": "run-p flow:ci tsc:ci"
   },
-  "author": "Paul Armstrong",
+  "author": "Juan Fabrega",
   "contributors": [
-    "Dan Abramov"
+    "Dan Abramov",
+    "Paul Armstrong"
   ],
   "license": "MIT",
   "devDependencies": {
