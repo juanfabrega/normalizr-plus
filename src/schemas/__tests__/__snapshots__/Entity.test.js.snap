@@ -102,17 +102,6 @@ Object {
   },
   "authorId": "8472",
   "body": "This article is great.",
-  "comments": Array [
-    Object {
-      "comment": "I like it!",
-      "id": "comment-123-4738",
-      "user": Object {
-        "id": "10293",
-        "name": "Jane",
-      },
-      "userId": "10293",
-    },
-  ],
   "commentsIds": Array [
     "comment-123-4738",
   ],
@@ -296,7 +285,7 @@ Object {
       "123": Object {
         "authorId": "8472",
         "body": "This article is great.",
-        "commentsIds": Array [
+        "commentIds": Array [
           "comment-123-4738",
         ],
         "id": "123",
@@ -327,7 +316,7 @@ Object {
       "123": Object {
         "author_id": "8472",
         "body": "This article is great.",
-        "comments_ids": Array [
+        "comment_ids": Array [
           "comment-123-4738",
         ],
         "id": "123",

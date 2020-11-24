@@ -68,7 +68,7 @@ export default class EntitySchema {
       return key;
     }
     if (Array.isArray(schema)) {
-      if (key[key.length - 1] === 's') {
+      if (key[key.length - 1] !== 's') {
         return `${key}${this._keyNameAffix}s`;
       }
       return `${key.slice(0, key.length - 1)}${this._keyNameAffix}s`;
